@@ -12,15 +12,57 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components{
+  .bg-card-blue {
+    background-color: #BAE2FF;
+  }
+  .bg-card-teal {
+    background-color: #B9FFDD;
+  }
+  .bg-card-yellow {
+    background-color: #FFE8AC;
+  }
+  .bg-card-salmon {
+    background-color: #FFCAB9;
+  }
+  .bg-card-red {
+    background-color: #F99494;
+  }
+  .bg-card-sky {
+    background-color: #9DD6FF;
+  }
+  .bg-card-pink {
+    background-color: #ECA1FF;
+  }
+  .bg-card-lime {
+    background-color: #DAFF8B;
+  }
+  .bg-card-orange {
+    background-color: #FFA285;
+  }
+  .bg-card-cloud {
+    background-color: #CDCDCD;
+  }
+  .bg-card-gray {
+    background-color: #979797;
+  }
+  .bg-card-brown {
+    background-color: #A99A7C;
+  }
+  .bg-card-white {
+    background-color: #FFFFFF;
+  }
 }
