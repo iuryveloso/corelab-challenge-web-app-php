@@ -3,18 +3,18 @@ import {
   Errors,
   Message,
   Unauthenticated,
-} from "@/interfaces/todoInterfaces";
+} from '@/interfaces/todoInterfaces'
 
-const domain = () => process.env.NEXT_PUBLIC_API_DOMAIN as string;
+const domain = () => process.env.NEXT_PUBLIC_API_DOMAIN as string
 
 export async function index(token: string): Promise<Unauthenticated | Todo[]> {
   return await fetch(`${domain()}/api/todos`, {
-    method: "GET",
-    credentials: "include",
+    method: 'GET',
+    credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((e) => e.json());
+  }).then((e) => e.json())
 }
 
 export async function store(
@@ -25,15 +25,15 @@ export async function store(
   token: string
 ): Promise<Unauthenticated | Message | Errors> {
   return await fetch(`${domain()}/api/todos`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ title, body, color, favorited }),
     headers: {
-      Accept: "application/json",
-      "Content-type": "application/json",
+      Accept: 'application/json',
+      'Content-type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    credentials: "include",
-  }).then((e) => e.json());
+    credentials: 'include',
+  }).then((e) => e.json())
 }
 
 export async function show(
@@ -41,12 +41,12 @@ export async function show(
   token: string
 ): Promise<Unauthenticated | Todo> {
   return await fetch(`${domain()}/api/todos/${id as string}`, {
-    method: "GET",
-    credentials: "include",
+    method: 'GET',
+    credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((e) => e.json());
+  }).then((e) => e.json())
 }
 
 export async function update(
@@ -58,15 +58,15 @@ export async function update(
   token: string
 ): Promise<Unauthenticated | Message | Errors> {
   return await fetch(`${domain()}/api/todos/${id}`, {
-    method: "PATCH",
+    method: 'PATCH',
     body: JSON.stringify({ title, body, color, favorited }),
     headers: {
-      Accept: "application/json",
-      "Content-type": "application/json",
+      Accept: 'application/json',
+      'Content-type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    credentials: "include",
-  }).then((e) => e.json());
+    credentials: 'include',
+  }).then((e) => e.json())
 }
 
 export async function destroy(
@@ -74,12 +74,12 @@ export async function destroy(
   token: string
 ): Promise<Unauthenticated | Message> {
   return await fetch(`${domain()}/api/todos/${id}`, {
-    method: "DELETE",
-    credentials: "include",
+    method: 'DELETE',
+    credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((e) => e.json());
+  }).then((e) => e.json())
 }
 
 export async function restore(
@@ -87,10 +87,10 @@ export async function restore(
   token: string
 ): Promise<Unauthenticated | Message> {
   return await fetch(`${domain()}/api/todos/restore/${id}`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((e) => e.json());
+  }).then((e) => e.json())
 }

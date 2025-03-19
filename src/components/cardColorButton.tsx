@@ -1,16 +1,16 @@
-import { Todo } from "@/interfaces/todoInterfaces";
+import { Todo } from '@/interfaces/todoInterfaces'
 
 interface CardColorButton {
-  color: Todo["color"];
-  editColor: (color: Todo["color"]) => void;
+  color: Todo['color']
+  editColor: (color: Todo['color']) => void
 }
 
 export default function CardColorButton({ color, editColor }: CardColorButton) {
-    const colorClassName = `bg-card-${color}`;
+  const colorClassName = `bg-card-${color}`
   return (
     <button
-      className={`w-8 h-8 ${colorClassName} rounded-full cursor-pointer`}
+      className={`h-8 w-8 ${colorClassName} cursor-pointer rounded-full`}
       onClick={() => editColor(color)}
     />
-  );
+  )
 }

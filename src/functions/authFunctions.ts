@@ -1,72 +1,77 @@
-import { login, logout, register } from "@/api/authApi";
-import { Dispatch, SetStateAction } from "react";
-import { Errors, Unauthenticated } from "@/interfaces/authInterfaces";
-import { redirect } from "next/navigation";
-import { User } from "@/interfaces/userInterfaces";
+import { login, logout, register } from '@/api/authApi'
+import { Dispatch, SetStateAction } from 'react'
+import { Credentials, Errors } from '@/interfaces/authInterfaces'
+import { redirect } from 'next/navigation'
+import { User } from '@/interfaces/userInterfaces'
 
 interface AuthFunctions {
   setErrors: Dispatch<
     SetStateAction<{
-      name?: Array<string>;
-      email?: Array<string>;
-      file?: Array<string>;
-      password?: Array<string>;
+      name?: Array<string>
+      email?: Array<string>
+      file?: Array<string>
+      password?: Array<string>
     }>
-  >;
-  setMessage: Dispatch<SetStateAction<string>>;
-  setToken: Dispatch<SetStateAction<string>>;
+  >
+  setMessage: Dispatch<SetStateAction<string>>
+  setToken: Dispatch<SetStateAction<string>>
 }
 
 const isErrors = (value: unknown): value is Errors =>
-  (value as Errors).errors !== undefined;
+  (value as Errors).errors !== undefined
 
-const isUnauthenticated = (value: unknown): value is Unauthenticated =>
-  (value as Unauthenticated).unauthenticated !== undefined;
+export function isLoggedIn() {
+  if (!localStorage.getItem('token')) redirect('/login')
+}
 
 export async function authLogin(
   user: User,
-  setErrors: AuthFunctions["setErrors"],
-  setToken: AuthFunctions["setToken"]
+  credentials: Credentials,
+  setErrors: AuthFunctions['setErrors'],
+  setToken: AuthFunctions['setToken']
 ) {
-  const { email, password } = user;
+  const { email } = user
+  const { password } = credentials
   await login(email, password).then((data) => {
-    if (isErrors(data)) setErrors(data.errors);
+    if (isErrors(data)) setErrors(data.errors)
     else {
-      localStorage.setItem("token", data.token);
-      if (setToken) setToken(data.token);
+      localStorage.setItem('token', data.token)
+      if (setToken) setToken(data.token)
+      redirect('/dashboard')
     }
-  });
+  })
 }
 
 export async function authRegister(
   user: User,
-  setErrors: AuthFunctions["setErrors"],
-  setToken: AuthFunctions["setToken"]
+  file: File,
+  credentials: Credentials,
+  setErrors: AuthFunctions['setErrors'],
+  setToken: AuthFunctions['setToken']
 ) {
-  const { name, email, file, password, password_confirmation } = user;
+  const { name, email } = user
+  const { password, password_confirmation } = credentials
   await register(name, email, file, password, password_confirmation).then(
     (data) => {
-      if (isErrors(data)) setErrors(data.errors);
+      if (isErrors(data)) setErrors(data.errors)
       else {
-        localStorage.setItem("token", data.token);
-        if (setToken) setToken(data.token);
+        localStorage.setItem('token', data.token)
+        if (setToken) setToken(data.token)
+        redirect('/dashboard')
       }
     }
-  );
+  )
 }
 
 export async function authLogout(
-  setMessage: AuthFunctions["setMessage"],
-  setToken: AuthFunctions["setToken"],
+  setMessage: AuthFunctions['setMessage'],
+  setToken: AuthFunctions['setToken'],
   token: string
 ) {
   await logout(token as string).then((data) => {
-    if (isUnauthenticated(data)) redirect("/");
-    else {
-      setMessage(data.message);
-
-      localStorage.removeItem("token");
-      if (setToken) setToken("");
-    }
-  });
+    setMessage(data.message)
+    localStorage.removeItem('token')
+    if (setToken) setToken('')
+    redirect('/login')
+  })
 }

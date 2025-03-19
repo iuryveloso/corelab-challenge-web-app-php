@@ -1,25 +1,20 @@
-import {
-  Errors,
-  Message,
-  Token,
-  Unauthenticated,
-} from "@/interfaces/authInterfaces";
+import { Errors, Message, Token } from '@/interfaces/authInterfaces'
 
-const domain = () => process.env.NEXT_PUBLIC_API_DOMAIN as string;
+const domain = () => process.env.NEXT_PUBLIC_API_DOMAIN as string
 
 export async function login(
   email: string,
   password: string
 ): Promise<Token | Errors> {
   return await fetch(`${domain()}/api/login`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: {
-      Accept: "application/json",
-      "Content-type": "application/json",
+      Accept: 'application/json',
+      'Content-type': 'application/json',
     },
-    credentials: "include",
-  }).then((e) => e.json());
+    credentials: 'include',
+  }).then((e) => e.json())
 }
 
 export async function register(
@@ -29,31 +24,25 @@ export async function register(
   password: string,
   password_confirmation: string
 ): Promise<Token | Errors> {
+  const authFormData = new FormData()
+  authFormData.append('name', name)
+  authFormData.append('email', email)
+  authFormData.append('file', file)
+  authFormData.append('password', password)
+  authFormData.append('password_confirmation', password_confirmation)
   return await fetch(`${domain()}/api/register`, {
-    method: "POST",
-    body: JSON.stringify({
-      name,
-      email,
-      file,
-      password,
-      password_confirmation,
-    }),
-    headers: {
-      Accept: "application/json",
-      "Content-type": "application/json",
-    },
-    credentials: "include",
-  }).then((e) => e.json());
+    method: 'POST',
+    body: authFormData,
+    credentials: 'include',
+  }).then((e) => e.json())
 }
 
-export async function logout(
-  token: string
-): Promise<Unauthenticated | Message> {
+export async function logout(token: string): Promise<Message> {
   return await fetch(`${domain()}/api/logout`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((e) => e.json());
+  }).then((e) => e.json())
 }
