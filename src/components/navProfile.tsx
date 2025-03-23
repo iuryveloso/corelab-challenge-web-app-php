@@ -21,6 +21,8 @@ export default function NavProfile({ user, onClickLogout }: NavProfile) {
         >
           {user.avatar ? (
             <Image
+              loader={({ src }) => src}
+              unoptimized={true}
               src={`${domain}${user.avatar}`}
               width={70}
               height={70}

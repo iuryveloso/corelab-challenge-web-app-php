@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CoreNote
 
-## Getting Started
+O Core note é um app para gerenciar notas de maneira simples e intuitíva. É construído usando o [Next.js](https://nextjs.org/) para o APP de frontend , e [Laravel](https://laravel.com/) + [MySQL](https://www.mysql.com/) para a API REST de backend.
 
-First, run the development server:
+## Instalação: 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Clone os repositórios do [APP](https://github.com/iuryveloso/corelab-challenge-web-app-php) e da [API](https://github.com/iuryveloso/corelab-api-challenge-php). Coloque-os de preferencia no mesmo diretório.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copie o arquivo ".env.example" na pasta raiz do app.Renomeie-o para ".env" e complete as informações restantes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copie o arquivo ".env.example" na pasta raiz da api.Renomeie-o para ".env" e complete as informações restantes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copie o arquivo ".env.example" na pasta "/docker", dentro da api.Renomeie-o para ".env" e complete as informações restantes, atentando-se aos diretórios do app (APP_DIRECTORY) e da api (API_DIRECTORY).
 
-## Learn More
+Acesse a pasta "/docker", dentro da api pelo terminal e execute o comando ```docker compose up -d```.
 
-To learn more about Next.js, take a look at the following resources:
+Depois de subir os containers docker, rode ```docker exec -it corenote_api  bash```, e em seguida use os commando a seguir: 
+  1. ```composer install```
+  2. ```php artisan migrate```
+  3. ```php artisan key:generate```
+  4. ```php artisan optimize```
+  5. ```php artisan storage:link```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Por fim, abra o navegador e acesse [http://localhost:3000](http://localhost:3000). Aproveite!

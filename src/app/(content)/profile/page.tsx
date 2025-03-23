@@ -103,7 +103,7 @@ export default function Profile() {
   function fileupload(e: ChangeEvent<HTMLInputElement>) {
     const files = e.target.files
     if (!files) return
-    
+
     userUpdateAvatar(files[0], setUser, setErrors, setMessage, token)
   }
 
@@ -113,9 +113,9 @@ export default function Profile() {
     inputRef.current.click()
   }
 
-   function onClickLogout() {
-      authLogout(setMessage, setToken, token)
-    }
+  function onClickLogout() {
+    authLogout(setMessage, setToken, token)
+  }
 
   return (
     <div>
@@ -212,10 +212,12 @@ export default function Profile() {
               <div className={'mb-3 flex justify-center'}>
                 {user.avatar ? (
                   <Image
+                    loader={({src})=> src}
+                    unoptimized={true}
                     src={`${imagesDomain}${user.avatar}`}
                     width={250}
                     height={250}
-                    alt={'Main logo'}
+                    alt={'Profile'}
                     priority={true}
                     className={`h-36 w-36 rounded-full border border-gray-300 shadow-md`}
                   />
@@ -224,7 +226,7 @@ export default function Profile() {
                     src={'/user.svg'}
                     width={250}
                     height={250}
-                    alt={'Main logo'}
+                    alt={'Profile'}
                     priority={true}
                     className={`h-36 w-36 rounded-full border border-gray-300 shadow-md`}
                   />

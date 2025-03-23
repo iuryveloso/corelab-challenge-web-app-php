@@ -104,6 +104,20 @@ export default function Login() {
     else setShownTodos(todos)
   }, [todos, search])
 
+  function hasFavorited() {
+    return (
+      shownTodos.reduce((curr, todo) => (todo.favorited ? curr + 1 : curr), 0) >
+      0
+    )
+  }
+
+  function hasOther() {
+    return (
+      shownTodos.reduce((curr, todo) => (!todo.favorited ? curr + 1 : curr), 0) >
+      0
+    )
+  }
+
   function onClickLogout() {
     authLogout(setMessage, setToken, token)
   }
@@ -253,10 +267,13 @@ export default function Login() {
             </div>
           </div>
         </div>
-
-        <div className={'text-center mt-5'}>
-          <h3 className={'text-xl'}>Favoritos</h3>
-        </div>
+        {hasFavorited() ? (
+          <div className={'mt-5 text-center'}>
+            <h3 className={'text-xl'}>Favoritos</h3>
+          </div>
+        ) : (
+          false
+        )}
         <div className={'flex flex-wrap justify-center'}>
           {shownTodos
             .filter((todo) => todo.favorited)
@@ -278,10 +295,13 @@ export default function Login() {
               )
             })}
         </div>
-
-        <div className={'text-center mt-5'}>
-          <h3 className={'text-xl'}>Outros</h3>
-        </div>
+        {hasOther() ? (
+          <div className={'mt-5 text-center'}>
+            <h3 className={'text-xl'}>Outros</h3>
+          </div>
+        ) : (
+          false
+        )}
         <div className={'flex flex-wrap justify-center'}>
           {shownTodos
             .filter((todo) => !todo.favorited)

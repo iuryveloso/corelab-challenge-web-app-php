@@ -1,6 +1,6 @@
 import { login, logout, register } from '@/api/authApi'
 import { Dispatch, SetStateAction } from 'react'
-import { Credentials, Errors } from '@/interfaces/authInterfaces'
+import { Credentials, Errors, Token } from '@/interfaces/authInterfaces'
 import { redirect } from 'next/navigation'
 import { User } from '@/interfaces/userInterfaces'
 
@@ -20,6 +20,9 @@ interface AuthFunctions {
 const isErrors = (value: unknown): value is Errors =>
   (value as Errors).errors !== undefined
 
+const isToken = (value: unknown): value is Token =>
+  (value as Token).token !== undefined
+
 export function isLoggedIn() {
   if (!localStorage.getItem('token')) redirect('/login')
 }
@@ -34,7 +37,7 @@ export async function authLogin(
   const { password } = credentials
   await login(email, password).then((data) => {
     if (isErrors(data)) setErrors(data.errors)
-    else {
+    if (isToken(data)) {
       localStorage.setItem('token', data.token)
       if (setToken) setToken(data.token)
       redirect('/dashboard')
@@ -44,17 +47,16 @@ export async function authLogin(
 
 export async function authRegister(
   user: User,
-  file: File,
   credentials: Credentials,
   setErrors: AuthFunctions['setErrors'],
   setToken: AuthFunctions['setToken']
 ) {
   const { name, email } = user
   const { password, password_confirmation } = credentials
-  await register(name, email, file, password, password_confirmation).then(
+  await register(name, email, password, password_confirmation).then(
     (data) => {
       if (isErrors(data)) setErrors(data.errors)
-      else {
+      if (isToken(data)) {
         localStorage.setItem('token', data.token)
         if (setToken) setToken(data.token)
         redirect('/dashboard')

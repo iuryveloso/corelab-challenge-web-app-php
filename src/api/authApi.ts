@@ -20,20 +20,17 @@ export async function login(
 export async function register(
   name: string,
   email: string,
-  file: File,
   password: string,
   password_confirmation: string
 ): Promise<Token | Errors> {
-  const authFormData = new FormData()
-  authFormData.append('name', name)
-  authFormData.append('email', email)
-  authFormData.append('file', file)
-  authFormData.append('password', password)
-  authFormData.append('password_confirmation', password_confirmation)
   return await fetch(`${domain()}/api/register`, {
     method: 'POST',
-    body: authFormData,
+    body: JSON.stringify({ name,email, password, password_confirmation }),
     credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'application/json',
+    },
   }).then((e) => e.json())
 }
 
