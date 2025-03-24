@@ -13,7 +13,7 @@ import { Errors, User } from '@/interfaces/userInterfaces'
 import NavProfile from '@/components/navProfile'
 import Button from '@/components/button'
 import { Credentials } from '@/interfaces/authInterfaces'
-import { authLogout, isLoggedIn } from '@/functions/authFunctions'
+import { authLogout } from '@/functions/authFunctions'
 
 export default function Profile() {
   const { token, setToken } = useContext(AppContext)
@@ -42,10 +42,6 @@ export default function Profile() {
   const [showMessage, setShowMessage] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    isLoggedIn()
-  }, [])
 
   useEffect(() => {
     if (Object.keys(errors).length !== 0) {
@@ -240,7 +236,7 @@ export default function Profile() {
                 />
                 <input
                   type={'file'}
-                  // accept={'image/png, image/jpeg, .svg'}
+                  accept={'image/png, image/jpeg, .svg'}
                   hidden
                   ref={inputRef}
                   onChange={(e) => fileupload(e)}

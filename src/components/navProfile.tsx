@@ -11,10 +11,13 @@ interface NavProfile {
 export default function NavProfile({ user, onClickLogout }: NavProfile) {
   const domain = `${process.env.NEXT_PUBLIC_API_DOMAIN}/storage/uploads/`
   const [showMenu, setShowMenu] = useState(false)
+
+  const nameArray = user.name.split(' ')
+  const name = `${nameArray[0] ?? ''} ${nameArray[1] ?? ''}` 
   return (
     <div className={'flex flex-col items-center'}>
       <div className={'flex items-center'}>
-        <label className={'mx-2'}>{user.name.split(' ')[0]}</label>
+        <label className={'mx-2'}>{name}</label>
         <div
           className={'cursor-pointer'}
           onClick={() => setShowMenu(!showMenu)}
@@ -24,8 +27,8 @@ export default function NavProfile({ user, onClickLogout }: NavProfile) {
               loader={({ src }) => src}
               unoptimized={true}
               src={`${domain}${user.avatar}`}
-              width={70}
-              height={70}
+              width={100}
+              height={100}
               alt={'Main logo'}
               priority={true}
               className={

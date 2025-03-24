@@ -1,9 +1,11 @@
 'use client'
+import { getTokenFromCookies } from '@/api/tokenApi'
 import {
   createContext,
   Dispatch,
   ReactElement,
   SetStateAction,
+  useEffect,
   useState,
 } from 'react'
 
@@ -21,11 +23,16 @@ export const AppContext = createContext<Context>({
 })
 
 export default function AppProvider({ children }: { children: ReactElement }) {
-  const tokenStorage =
-    typeof localStorage !== 'undefined'
-      ? (localStorage.getItem('token') as string)
-      : ''
-  const [token, setToken] = useState(tokenStorage)
+  const [token, setToken] = useState('')
+
+  useEffect(() => {
+    async function getToken() {
+      await getTokenFromCookies().then((e) => {
+        if (e.token) setToken(e.token)
+      })
+    }
+    getToken()
+  }, [])
 
   return (
     <AppContext.Provider value={{ token, setToken }}>

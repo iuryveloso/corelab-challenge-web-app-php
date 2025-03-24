@@ -71,11 +71,11 @@ export default function Login() {
   }
 
   function loginSubmit() {
-    authLogin(user, credentials, setErrors, setToken)
+    authLogin(user, credentials, setErrors, setMessage, setToken)
   }
 
   function registerSubmit() {
-    authRegister(user, credentials, setErrors, setToken)
+    authRegister(user, credentials, setErrors, setMessage, setToken)
   }
 
   return (

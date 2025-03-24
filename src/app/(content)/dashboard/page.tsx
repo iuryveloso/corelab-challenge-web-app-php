@@ -8,7 +8,7 @@ import {
   todoSearch,
   todoRestore,
 } from '@/functions/todoFunctions'
-import { Todo } from '@/interfaces/todoInterfaces'
+import { Errors, Todo } from '@/interfaces/todoInterfaces'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import Input from '@/components/input'
@@ -17,14 +17,7 @@ import { userShow } from '@/functions/userFunctions'
 import { User } from '@/interfaces/userInterfaces'
 import CardButton from '@/components/cardButton'
 import NavProfile from '@/components/navProfile'
-import { authLogout, isLoggedIn } from '@/functions/authFunctions'
-
-interface Errors {
-  title?: Array<string>
-  body?: Array<string>
-  color?: Array<string>
-  favorited?: Array<string>
-}
+import { authLogout } from '@/functions/authFunctions'
 
 export default function Login() {
   const emptyTodo: Todo = {
@@ -42,7 +35,7 @@ export default function Login() {
     email: '',
     avatar: '',
   })
-  const [errors, setErrors] = useState<Errors>({})
+  const [errors, setErrors] = useState<Errors['errors']>({})
   const [showErrors, setShowErrors] = useState(false)
   const [message, setMessage] = useState('')
   const [showMessage, setShowMessage] = useState(false)
@@ -60,6 +53,7 @@ export default function Login() {
   const getIconFavorited = todo.favorited
     ? '/icons/star_fill.svg'
     : '/icons/star.svg'
+
   function OnClickCardButton(
     type: 'edit' | 'color' | 'favorite' | 'delete' | 'save'
   ) {
@@ -69,10 +63,6 @@ export default function Login() {
       setTodo(emptyTodo)
     }
   }
-
-  useEffect(() => {
-    isLoggedIn()
-  }, [])
 
   useEffect(() => {
     if (Object.keys(errors).length !== 0) {
@@ -113,8 +103,10 @@ export default function Login() {
 
   function hasOther() {
     return (
-      shownTodos.reduce((curr, todo) => (!todo.favorited ? curr + 1 : curr), 0) >
-      0
+      shownTodos.reduce(
+        (curr, todo) => (!todo.favorited ? curr + 1 : curr),
+        0
+      ) > 0
     )
   }
 
@@ -267,61 +259,67 @@ export default function Login() {
             </div>
           </div>
         </div>
-        {hasFavorited() ? (
-          <div className={'mt-5 text-center'}>
-            <h3 className={'text-xl'}>Favoritos</h3>
-          </div>
-        ) : (
-          false
-        )}
         <div className={'flex flex-wrap justify-center'}>
-          {shownTodos
-            .filter((todo) => todo.favorited)
-            .map((todo, key) => {
-              return (
-                <div className={'flex'} key={key}>
-                  <Card
-                    todo={todo}
-                    emptyTodo={emptyTodo}
-                    setTodos={setTodos}
-                    setErrors={setErrors}
-                    setMessage={setMessage}
-                    todoUpdate={todoUpdate}
-                    todoDestroy={todoDestroy}
-                    setShowRestore={setShowRestore}
-                    token={token}
-                  />
-                </div>
-              )
-            })}
-        </div>
-        {hasOther() ? (
-          <div className={'mt-5 text-center'}>
-            <h3 className={'text-xl'}>Outros</h3>
+          <div>
+            {hasFavorited() ? (
+              <div className={'mt-5 text-center'}>
+                <h3 className={'text-xl'}>Favoritos</h3>
+              </div>
+            ) : (
+              false
+            )}
+            <div className={'flex flex-wrap justify-center'}>
+              {shownTodos
+                .filter((todo) => todo.favorited)
+                .map((todo, key) => {
+                  return (
+                    <div className={'flex'} key={key}>
+                      <Card
+                        todo={todo}
+                        emptyTodo={emptyTodo}
+                        setTodos={setTodos}
+                        setErrors={setErrors}
+                        setMessage={setMessage}
+                        todoUpdate={todoUpdate}
+                        todoDestroy={todoDestroy}
+                        setShowRestore={setShowRestore}
+                        token={token}
+                      />
+                    </div>
+                  )
+                })}
+            </div>
           </div>
-        ) : (
-          false
-        )}
-        <div className={'flex flex-wrap justify-center'}>
-          {shownTodos
-            .filter((todo) => !todo.favorited)
-            .map((todo, key) => {
-              return (
-                <div className={'flex'} key={key}>
-                  <Card
-                    todo={todo}
-                    emptyTodo={emptyTodo}
-                    setTodos={setTodos}
-                    setErrors={setErrors}
-                    setMessage={setMessage}
-                    todoUpdate={todoUpdate}
-                    todoDestroy={todoDestroy}
-                    setShowRestore={setShowRestore}
-                    token={token}
-                  />
-                </div>
-              )
-            })}
+          <div>
+            {hasOther() ? (
+              <div className={'mt-5 text-center'}>
+                <h3 className={'text-xl'}>Outros</h3>
+              </div>
+            ) : (
+              false
+            )}
+            <div className={'flex flex-wrap justify-center'}>
+              {shownTodos
+                .filter((todo) => !todo.favorited)
+                .map((todo, key) => {
+                  return (
+                    <div className={'flex'} key={key}>
+                      <Card
+                        todo={todo}
+                        emptyTodo={emptyTodo}
+                        setTodos={setTodos}
+                        setErrors={setErrors}
+                        setMessage={setMessage}
+                        todoUpdate={todoUpdate}
+                        todoDestroy={todoDestroy}
+                        setShowRestore={setShowRestore}
+                        token={token}
+                      />
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

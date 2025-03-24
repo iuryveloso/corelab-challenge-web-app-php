@@ -4,14 +4,7 @@ import { Todo, Errors, Unauthenticated } from '@/interfaces/todoInterfaces'
 import { redirect } from 'next/navigation'
 
 interface TodoFunctions {
-  setErrors: Dispatch<
-    SetStateAction<{
-      title?: Array<string>
-      body?: Array<string>
-      color?: Array<string>
-      favorited?: Array<string>
-    }>
-  >
+  setErrors: Dispatch<SetStateAction<Errors['errors']>>
   setMessage: Dispatch<SetStateAction<string>>
   setTodo: Dispatch<SetStateAction<Todo>>
   setTodos: Dispatch<SetStateAction<Todo[]>>
@@ -39,7 +32,7 @@ export async function todoIndex(
 ) {
   await index(token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else setTodos(data)
+    setTodos(data)
   })
 }
 
@@ -53,11 +46,12 @@ export async function todoStore(
   const { body, color, favorited, title } = todo
   await store(title, body, color, favorited, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else if (isErrors(data)) setErrors(data.errors)
-    else {
-      todoIndex(setTodos, token)
-      setMessage(data.message)
+    if (isErrors(data)) {
+      setErrors(data.errors)
+      return
     }
+    todoIndex(setTodos, token)
+    setMessage(data.message)
   })
 }
 
@@ -68,7 +62,7 @@ export async function todoShow(
 ) {
   await show(id, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else setTodo(data)
+    setTodo(data)
   })
 }
 
@@ -82,11 +76,12 @@ export async function todoUpdate(
   const { id, body, color, favorited, title } = todo
   await update(id, title, body, color, favorited, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else if (isErrors(data)) setErrors(data.errors)
-    else {
-      todoIndex(setTodos, token)
-      setMessage(data.message)
+    if (isErrors(data)) {
+      setErrors(data.errors)
+      return
     }
+    todoIndex(setTodos, token)
+    setMessage(data.message)
   })
 }
 
@@ -98,10 +93,8 @@ export async function todoDestroy(
 ) {
   await destroy(id, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else {
-      todoIndex(setTodos, token)
-      setMessage(data.message)
-    }
+    todoIndex(setTodos, token)
+    setMessage(data.message)
   })
 }
 
@@ -113,9 +106,7 @@ export async function todoRestore(
 ) {
   await restore(id, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else {
-      todoIndex(setTodos, token)
-      setMessage(data.message)
-    }
+    todoIndex(setTodos, token)
+    setMessage(data.message)
   })
 }

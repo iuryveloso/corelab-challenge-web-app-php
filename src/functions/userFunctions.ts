@@ -21,7 +21,7 @@ export async function userShow(
 ) {
   await show(token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else setUser(data)
+    setUser(data)
   })
 }
 
@@ -35,11 +35,12 @@ export async function userUpdate(
   const { name, email } = user
   await update(name, email, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else if (isErrors(data)) setErrors(data.errors)
-    else {
-      userShow(setUser, token)
-      setMessage(data.message)
+    if (isErrors(data)) {
+      setErrors(data.errors)
+      return
     }
+    userShow(setUser, token)
+    setMessage(data.message)
   })
 }
 
@@ -52,11 +53,12 @@ export async function userUpdateAvatar(
 ) {
   await updateAvatar(file, token).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else if (isErrors(data)) setErrors(data.errors)
-    else {
-      userShow(setUser, token)
-      setMessage(data.message)
+    if (isErrors(data)) {
+      setErrors(data.errors)
+      return
     }
+    userShow(setUser, token)
+    setMessage(data.message)
   })
 }
 
@@ -78,7 +80,10 @@ export async function userUpdatePassword(
     token
   ).then((data) => {
     if (isUnauthenticated(data)) redirect('/login')
-    else if (isErrors(data)) setErrors(data.errors)
-    else setMessage(data.message)
+    if (isErrors(data)) {
+      setErrors(data.errors)
+      return
+    }
+    setMessage(data.message)
   })
 }
